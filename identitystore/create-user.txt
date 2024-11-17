@@ -1,0 +1,1 @@
+aws identitystore create-user --user-name "firstname.lastname@example.org" --name "GivenName=Firstname,FamilyName=Lastname" --emails "Value="firstname.lastname@example.org",Type=Main,Primary=true" --display-name "FIRSTNAME LASTNAME" --identity-store-id d-12345678
