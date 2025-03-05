@@ -1,0 +1,1 @@
+aws ec2 create-vpc --instance-tenancy "default" --cidr-block "172.16.0.0/16" --ipv6-cidr-block-network-border-group "us-east-1" --tag-specification '{"resourceType":"vpc","tags":[{"key":"Name","value":"vpc0001.us-east-1.awcl"}]}'
