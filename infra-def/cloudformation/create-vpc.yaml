@@ -1,0 +1,53 @@
+Parameters:
+  VPC0001Name:
+    Type: String
+    Default: vpc0001.us-east-1.awcl
+  VPC0001Cidr:
+    Type: String
+    Default: 172.16.0.0/16
+  VPC0001SubnetPublic0001Name:
+    Type: String
+    Default: 0001.public.vpc0001.us-east-1.awcl
+  VPC0001SubnetPublic0002Name:
+    Type: String
+    Default: 0002.public.vpc0001.us-east-1.awcl
+  VPC0001SubnetInternal0001Name:
+    Type: String
+    Default: 0001.internal.vpc0001.us-east-1.awcl
+  VPC0001SubnetInternal0002Name:
+    Type: String
+    Default: 0002.internal.vpc0001.us-east-1.awcl
+  VPC0001SubnetPublic0001Cidr:
+    Type: String
+    Default: 172.16.101.0/24
+  VPC0001SubnetPublic0002Cidr:
+    Type: String
+    Default: 172.16.102.0/24
+  VPC0001SubnetInternal0001Cidr:
+    Type: String
+    Default: 172.16.201.0/24
+  VPC0001SubnetInternal0002Cidr:
+    Type: String
+    Default: 172.16.202.0/24
+  IGW0001Name:
+    Type: String
+    Default: 0001.igw.us-east-1.awcl
+
+
+Resources:
+  VPC0001:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPC0001Cidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Ref VPC0001Name
+
+  VPC0001IPv6:
+    Type: AWS::EC2::VPCCidrBlock
+    Properties:
+      VpcId: !Ref VPC0001
+      AmazonProvidedIpv6CidrBlock: true
+  
