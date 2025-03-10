@@ -1,0 +1,39 @@
+Parameters:
+  S3Bucket0001Name:
+    Type: String
+    Default: 0001.s3.us-east-1.awcl
+
+Resources:
+  S3Bucket0001:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3Bucket0001Name
+      BucketEncryption: SSE-S3
+      ObjectLockEnabled: false
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+
+  S3Bucket0001Policy0001:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket0001
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+            - 's3:GetObject'
+            Effect: Allow
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref S3Bucket0001
+                - /*
+            Principal: '*'
