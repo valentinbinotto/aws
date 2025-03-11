@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cat <<'EOF' > policy-assume-ec2-ssm.json
 {
   "Version": "2012-10-17",
