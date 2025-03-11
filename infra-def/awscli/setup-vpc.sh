@@ -1,3 +1,5 @@
+#!/bin/bash
+
 aws ec2 create-vpc --instance-tenancy "default" --cidr-block "172.16.0.0/16" --ipv6-cidr-block-network-border-group "us-east-1" --tag-specifications '{"resourceType":"vpc","tags":[{"key":"Name","value":"vpc0001.us-east-1.awcl"}]}'
 
 aws ec2 create-internet-gateway --tag-specifications '{"resourceType": "internet-gateway","tags":[{"key":"Name","value":"igw0001.vpc0001.us-east-1.awcl"}]}'
