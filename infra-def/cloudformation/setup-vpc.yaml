@@ -51,3 +51,76 @@ Resources:
       VpcId: !Ref VPC0001
       AmazonProvidedIpv6CidrBlock: true
   
+  InternetGateway0001:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref IGW0001Name
+
+  InternetGatewayAttachment0001:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway0001
+      VpcId: !Ref VPC0001
+
+  PublicSubnet0001:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC0001
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref VPC0001SubnetPublic0001Cidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Ref VPC0001SubnetPublic0001Name
+
+  PublicSubnet0002:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC0001
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: !Ref VPC0001SubnetPublic0002Cidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Ref VPC0001SubnetPublic0002Name
+
+  InternalSubnet0001:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC0001
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref VPC0001SubnetInternal0001Cidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Ref VPC0001SubnetInternal0001Name
+
+  InternalSubnet0002:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC0001
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: !Ref VPC0001SubnetInternal0002Cidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Ref VPC0001SubnetInternal0002Name
+
+  PublicRouteTable0001:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC0001
+      Tags:
+        - Key: Name
+          Value: !Sub ${VPC0001Name} Public RTB 0001
+
+  InternalRouteTable0001:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC0001
+      Tags:
+        - Key: Name
+          Value: !Sub ${VPC0001Name} Internal RTB 0001
+  
