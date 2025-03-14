@@ -123,4 +123,61 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${VPC0001Name} Internal RTB 0001
+
+  DefaultPublicRoute0001:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable0001
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway0001
+
+  PublicSubnet0001RouteTableAssoc0001:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable0001
+      SubnetId: !Ref PublicSubnet0001
+
+  PublicSubnet0002RouteTableAssoc0001:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable0001
+      SubnetId: !Ref PublicSubnet0002
+
+  InternalSubnet0001RouteTableAssoc0001:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref InternalRouteTable0001
+      SubnetId: !Ref InternalSubnet0001
+
+  InternalSubnet0002RouteTableAssoc0001:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref InternalRouteTable0001
+      SubnetId: !Ref InternalSubnet0002
+
+  PublicSecurityGroup0001:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ""
+      GroupName: ""
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: "-1"
+        - CidrIpv6: ::/0
+          IpProtocol: "-1"
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: "-1"
+        - CidrIpv6: ::/0
+          IpProtocol: "-1"
+      VpcId: !Ref VPC0001
+
   
+
+  PublicSecurityGroup0002:
+
+  InternalSecurityGroup0001:
+
+  InternalSecurityGroup0002:
+
+  InternalSecurityGroup0003:
