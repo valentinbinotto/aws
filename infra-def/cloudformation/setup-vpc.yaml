@@ -70,7 +70,9 @@ Resources:
       VpcId: !Ref VPC0001
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: !Ref VPC0001SubnetPublic0001Cidr
+      Ipv6CidrBlock: !Select [0, !Cidr [!GetAtt VPC0001.Ipv6CidrBlocks, 3, 64]]
       MapPublicIpOnLaunch: true
+      AssignIpv6AddressOnCreation: true
       Tags:
         - Key: Name
           Value: !Ref VPC0001SubnetPublic0001Name
@@ -81,7 +83,9 @@ Resources:
       VpcId: !Ref VPC0001
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: !Ref VPC0001SubnetPublic0002Cidr
+      Ipv6CidrBlock: !Select [1, !Cidr [!GetAtt VPC0001.Ipv6CidrBlocks, 3, 64]]
       MapPublicIpOnLaunch: true
+      AssignIpv6AddressOnCreation: true
       Tags:
         - Key: Name
           Value: !Ref VPC0001SubnetPublic0002Name
@@ -92,7 +96,9 @@ Resources:
       VpcId: !Ref VPC0001
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: !Ref VPC0001SubnetInternal0001Cidr
-      MapPublicIpOnLaunch: true
+      Ipv6CidrBlock: !Select [2, !Cidr [!GetAtt VPC0001.Ipv6CidrBlocks, 3, 64]]
+      MapPublicIpOnLaunch: false
+      AssignIpv6AddressOnCreation: true
       Tags:
         - Key: Name
           Value: !Ref VPC0001SubnetInternal0001Name
@@ -103,7 +109,9 @@ Resources:
       VpcId: !Ref VPC0001
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: !Ref VPC0001SubnetInternal0002Cidr
-      MapPublicIpOnLaunch: true
+      Ipv6CidrBlock: !Select [3, !Cidr [!GetAtt VPC0001.Ipv6CidrBlocks, 3, 64]]
+      MapPublicIpOnLaunch: false
+      AssignIpv6AddressOnCreation: true
       Tags:
         - Key: Name
           Value: !Ref VPC0001SubnetInternal0002Name
@@ -158,8 +166,8 @@ Resources:
   PublicSecurityGroup0001:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: ""
-      GroupName: ""
+      GroupDescription: "Allow all Egress, Allow all Ingress, Dual-Stack"
+      GroupName: "allow-egress-all-allow-ingress-all"
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: "-1"
@@ -172,12 +180,52 @@ Resources:
           IpProtocol: "-1"
       VpcId: !Ref VPC0001
 
-  
-
   PublicSecurityGroup0002:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow all Egress, Allow SSH Ingress, Dual-Stack"
+      GroupName: "allow-egress-all-allow-ingress-ssh"
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+        - CidrIpv6: ::/0
+          IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: "-1"
+        - CidrIpv6: ::/0
+          IpProtocol: "-1"
+      VpcId: !Ref VPC0001
 
   InternalSecurityGroup0001:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow all Egress, Allow No Ingress, Dual-Stack"
+      GroupName: "allow-egress-all-allow-ingress-no"
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: "-1"
+        - CidrIpv6: ::/0
+          IpProtocol: "-1"
+      VpcId: !Ref VPC0001
 
   InternalSecurityGroup0002:
-
-  InternalSecurityGroup0003:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow all Egress, Allow all VPC Ingress, Dual-Stack"
+      GroupName: "allow-egress-all-allow-ingress-allvpc"
+      SecurityGroupIngress:
+        - CidrIp: !Ref VPC0001Cidr
+          IpProtocol: "-1"
+        - CidrIpv6: ::/0
+          IpProtocol: "-1"
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: "-1"
+        - CidrIpv6: ::/0
+          IpProtocol: "-1"
+      VpcId: !Ref VPC0001
