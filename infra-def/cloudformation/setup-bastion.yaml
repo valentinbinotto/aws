@@ -1,0 +1,44 @@
+Parameters:
+  EC2InstanceBastionName:
+    Type: String
+    Default: bastion-0001-debian
+  EC2SSHKeyBastionAccess:
+    Type: String
+    Default: sshkey-bastion-0001
+  VPCid:
+    Type: String
+    Default: ""
+  VPCSubnetId:
+    Type: String
+    Default: ""
+  EC2SecurityGroupid:
+    Type: String
+    Default: ""
+
+  EC2InstanceBastion:
+    Type: AWS::EC2::Instance
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref EC2InstanceBastionName
+      ImageId: ami-for-debi
+      InstanceInitiatedShutdownBehavior: stop
+      InstanceType: t3.small
+      KeyName: !Ref EC2SSHKeyBastionAccess
+      Monitoring: true
+      UserData: !Base64
+        Fn::Sub: |
+          #!/bin/bash
+          sudo apt update
+          sudo apt full-upgrade -y
+          sudo apt install -y git curl wget openstack-clients vim awscli
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroupid
+      SubnetId: !Ref VPCSubnetId
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sda1"
+        Ebs:
+          DeleteOnTermination: false
+          Encrypted: true
+          VolumeSize: 20
+          VolumeType: gp3
