@@ -228,7 +228,7 @@ Resources:
       SecurityGroupIngress:
         - CidrIp: !Ref VPC0001Cidr
           IpProtocol: "-1"
-        - CidrIpv6: ::/0
+        - CidrIpv6: !GetAtt VPC0001.Ipv6CidrBlocks
           IpProtocol: "-1"
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
