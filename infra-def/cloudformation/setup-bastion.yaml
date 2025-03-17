@@ -11,31 +11,9 @@ Parameters:
   VPCSubnetId:
     Type: String
     Default: ""
-  EC2SecurityGroupName:
+  EC2SecurityGroupid:
     Type: String
-    Default: "allow-all-out-ssh-in-every"
-
-Resources:
-  EC2SecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: "Allows all out, SSH in from everywhere, Dual Stack"
-      GroupName: !Ref EC2SecurityGroupName
-      SecurityGroupIngress:
-        - CidrIp: 0.0.0.0/0
-          IpProtocol: "tcp"
-          FromPort: 22
-          ToPort: 22
-        - CidrIpv6: "::/0"
-          IpProtocol: "tcp"
-          FromPort: 22
-          ToPort: 22
-      SecurityGroupEgress:
-        - CidrIp: 0.0.0.0/0
-          IpProtocol: "-1"
-        - CidrIpv6: "::/0"
-          IpProtocol: "-1"
-      VpcId: !Ref VPCid
+    Default: ""
 
   EC2InstanceBastion:
     Type: AWS::EC2::Instance
@@ -53,8 +31,9 @@ Resources:
           #!/bin/bash
           sudo apt update
           sudo apt full-upgrade -y
+          sudo apt install -y git curl wget openstack-clients vim awscli
       SecurityGroupIds:
-        - !Ref EC2SecurityGroup
+        - !Ref EC2SecurityGroupid
       SubnetId: !Ref VPCSubnetId
       BlockDeviceMappings:
       - DeviceName: "/dev/sda1"
@@ -63,5 +42,3 @@ Resources:
           Encrypted: true
           VolumeSize: 20
           VolumeType: gp3
-    DependsOn:
-      - EC2SecurityGroup
