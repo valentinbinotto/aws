@@ -8,22 +8,24 @@ Parameters:
   VPCid:
     Type: String
     Default: ""
-  VPCSubnetId:
+  VPCPublicSubnetId:
     Type: String
     Default: ""
   EC2SecurityGroupid:
     Type: String
     Default: ""
+  EC2AMIid:
+    Type: String
+    Default: ""
 
-    (add ssm config/setup)
-
+Resources:
   EC2InstanceBastion:
     Type: AWS::EC2::Instance
     Properties:
       Tags:
         - Key: Name
           Value: !Ref EC2InstanceBastionName
-      ImageId: ami-for-debi
+      ImageId: !Ref EC2AMIid
       InstanceInitiatedShutdownBehavior: stop
       InstanceType: t3.small
       KeyName: !Ref EC2SSHKeyBastionAccess
@@ -31,12 +33,12 @@ Parameters:
       UserData: !Base64
         Fn::Sub: |
           #!/bin/bash
-          sudo apt update
-          sudo apt full-upgrade -y
-          sudo apt install -y git curl wget openstack-clients vim awscli
+          apt update
+          apt full-upgrade -y
+          apt install -y git curl wget openstack-clients vim awscli
       SecurityGroupIds:
         - !Ref EC2SecurityGroupid
-      SubnetId: !Ref VPCSubnetId
+      SubnetId: !Ref VPCPublicSubnetId
       BlockDeviceMappings:
       - DeviceName: "/dev/sda1"
         Ebs:
