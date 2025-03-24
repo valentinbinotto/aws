@@ -1,1 +1,48 @@
+Parameters:
+  EC2InstanceIPFSName:
+    Type: String
+    Default: ipfs-0001-debian
+  EC2SSHKeyIPFSAccess:
+    Type: String
+    Default: sshkey-bastion-0001
+  VPCid:
+    Type: String
+    Default: ""
+  VPCPublicSubnetId:
+    Type: String
+    Default: ""
+  EC2AMIid:
+    Type: String
+    Default: ""
+  PublicKeyMaterialAdmin:
+    Type: String
+    Default: ""
 
+Resources:
+  EC2InstanceBastion:
+    Type: AWS::EC2::Instance
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref EC2InstanceBastionName
+      ImageId: !Ref EC2AMIid
+      InstanceInitiatedShutdownBehavior: stop
+      InstanceType: t3.small
+      KeyName: !Ref EC2SSHKeyBastionAccess
+      Monitoring: true
+      UserData: !Base64
+        Fn::Sub: |
+          #!/bin/bash
+          apt update
+          apt full-upgrade -y
+          apt install -y git curl wget openstack-clients vim awscli
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroupid
+      SubnetId: !Ref VPCPublicSubnetId
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sda1"
+        Ebs:
+          DeleteOnTermination: false
+          Encrypted: true
+          VolumeSize: 20
+          VolumeType: gp3
