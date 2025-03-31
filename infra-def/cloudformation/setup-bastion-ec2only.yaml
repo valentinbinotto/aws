@@ -3,7 +3,7 @@ Parameters:
     Type: String
     Default: bastion-0001-debian
   EC2SSHKeyBastionAccess:
-    Type: AWS::EC2::KeyPair::Id
+    Type: AWS::EC2::KeyPair::KeyName
   VPCid:
     Type: AWS::EC2::VPC::Id
   VPCPublicSubnetId:
@@ -11,8 +11,7 @@ Parameters:
   EC2SecurityGroupid:
     Type: AWS::EC2::SecurityGroup::Id
   EC2AMIid:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::Image::Id
 
 Resources:
   EC2InstanceBastion:
