@@ -6,8 +6,10 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
   VPCid:
     Type: AWS::EC2::VPC::Id
-  VPCSubnetId:
+  VPCSubnetIds:
     Type: List<AWS::EC2::Subnet::Id>
+  VPCSubnetIdEC2Instance:
+    Type: AWS::EC2::Subnet::Id
   EC2SecurityGroupidEC2Inst:
     Type: AWS::EC2::SecurityGroup::Id
   EC2SecurityGroupidVPCend:
@@ -16,8 +18,6 @@ Parameters:
     Type: AWS::EC2::Image::Id
 
 Resources:
-
-## SETUP SSM ##
 
   SSMIAMRole0001:
     Type: AWS::IAM::Role
@@ -42,14 +42,79 @@ Resources:
       Roles:
         - !Ref SSMIAMRole0001
 
-  SSMVPCEndpoint:
+  SSMVPCEndpoint0001:
     Type: AWS::EC2::VPCEndpoint
     Properties:
       VpcId: !Ref VPCid
-      ServiceName: 
-
-
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssm'
+      VpcEndpointType: Interface
+      SubnetIds: 
+        - !Ref VPCSubnetIds
+      SecurityGroupIds: 
+        - !Ref EC2SecurityGroupidVPCend
   
+  SSMVPCEndpoint0002:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPCid
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ec2'
+      VpcEndpointType: Interface
+      SubnetIds: 
+        - !Ref VPCSubnetIds
+      SecurityGroupIds: 
+        - !Ref EC2SecurityGroupidVPCend
+
+  SSMVPCEndpoint0003:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPCid
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ec2messages'
+      VpcEndpointType: Interface
+      SubnetIds: 
+        - !Ref VPCSubnetIds
+      SecurityGroupIds: 
+        - !Ref EC2SecurityGroupidVPCend
+        
+  SSMVPCEndpoint0004:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPCid
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.ssmmessages'
+      VpcEndpointType: Interface
+      SubnetIds: 
+        - !Ref VPCSubnetIds
+      SecurityGroupIds: 
+        - !Ref EC2SecurityGroupidVPCend
+        
+  SSMVPCEndpoint0005:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPCid
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.kms'
+      VpcEndpointType: Interface
+      SubnetIds: 
+        - !Ref VPCSubnetIds
+      SecurityGroupIds: 
+        - !Ref EC2SecurityGroupidVPCend
+        
+  SSMVPCEndpoint0006:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPCid
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.logs'
+      VpcEndpointType: Interface
+      SubnetIds: 
+        - !Ref VPCSubnetIds
+      SecurityGroupIds: 
+        - !Ref EC2SecurityGroupidVPCend
+
+  SSMVPCEndpoint0007:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPCid
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+      VpcEndpointType: Gateway
+
   EC2InstanceBastion:
     Type: AWS::EC2::Instance
     Properties:
@@ -70,7 +135,7 @@ Resources:
           apt install -y git curl wget openstack-clients vim awscli
           # Install SSM Agent
       SecurityGroupIds:
-        - !Ref EC2SecurityGroupidEC2Inst
+        - !Ref VPCSubnetIdEC2Instance
       SubnetId: !Ref VPCSubnetId
       BlockDeviceMappings:
       - DeviceName: "/dev/sda1"
