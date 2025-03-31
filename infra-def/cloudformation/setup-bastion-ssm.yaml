@@ -6,9 +6,11 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
   VPCid:
     Type: AWS::EC2::VPC::Id
-  VPCPublicSubnetId:
-    Type: AWS::EC2::Subnet::Id
-  EC2SecurityGroupid:
+  VPCSubnetId:
+    Type: List<AWS::EC2::Subnet::Id>
+  EC2SecurityGroupidEC2Inst:
+    Type: AWS::EC2::SecurityGroup::Id
+  EC2SecurityGroupidVPCend:
     Type: AWS::EC2::SecurityGroup::Id
   EC2AMIid:
     Type: AWS::EC2::Image::Id
@@ -17,6 +19,37 @@ Resources:
 
 ## SETUP SSM ##
 
+  SSMIAMRole0001:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 
+                - ec2.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Path: "/"
+
+  SSMIAMInstanceProfile0001:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref SSMIAMRole0001
+
+  SSMVPCEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPCid
+      ServiceName: 
+
+
+  
   EC2InstanceBastion:
     Type: AWS::EC2::Instance
     Properties:
@@ -26,6 +59,7 @@ Resources:
       ImageId: !Ref EC2AMIid
       InstanceInitiatedShutdownBehavior: stop
       InstanceType: t3.small
+      IamInstanceProfile: !Ref SSMIAMInstanceProfile0001
       KeyName: !Ref EC2SSHKeyBastionAccess
       Monitoring: true
       UserData: !Base64
@@ -36,8 +70,8 @@ Resources:
           apt install -y git curl wget openstack-clients vim awscli
           # Install SSM Agent
       SecurityGroupIds:
-        - !Ref EC2SecurityGroupid
-      SubnetId: !Ref VPCPublicSubnetId
+        - !Ref EC2SecurityGroupidEC2Inst
+      SubnetId: !Ref VPCSubnetId
       BlockDeviceMappings:
       - DeviceName: "/dev/sda1"
         Ebs:
