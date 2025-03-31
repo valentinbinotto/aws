@@ -32,6 +32,9 @@ Parameters:
   IGW0001Name:
     Type: String
     Default: 0001.igw.us-east-1.awcl
+  VPC0001KeyName0001:
+    Type: String
+    Default: 0001.key.us-east-1.awcl
 
 
 Resources:
@@ -240,3 +243,4 @@ Resources:
 
 
       [KeyPair Create from KeyMaterial]
+      !Ref VPC0001KeyName0001
