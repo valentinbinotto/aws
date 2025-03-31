@@ -35,6 +35,9 @@ Parameters:
   VPC0001KeyName0001:
     Type: String
     Default: 0001.key.us-east-1.awcl
+  VPC0001KeyPublicMaterial0001:
+    Type: String
+    Default: ""
 
 
 Resources:
@@ -240,7 +243,8 @@ Resources:
           IpProtocol: "-1"
       VpcId: !Ref VPC0001
 
-
-
-      [KeyPair Create from KeyMaterial]
-      !Ref VPC0001KeyName0001
+  VPC0001KeyPair0001:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: !Ref VPC0001KeyName0001
+      PublicKeyMaterial: !Ref VPC0001KeyPublicMaterial0001
