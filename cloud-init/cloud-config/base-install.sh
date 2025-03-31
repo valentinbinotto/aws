@@ -11,5 +11,5 @@ packages:
 - awscli
 
 runcmd:
-- [ sh, -c, "echo vbhost-0001 > /etc/hostname" ]
-- hostname vbhost-0001
+- [ sh, -c, "echo vbhost-0001.external-cloud-infrastructure.com > /etc/hostname" ]
+- hostname vbhost-0001.external-cloud-infrastructure.com
