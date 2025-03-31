@@ -236,3 +236,7 @@ Resources:
         - CidrIpv6: ::/0
           IpProtocol: "-1"
       VpcId: !Ref VPC0001
+
+
+
+      [KeyPair Create from KeyMaterial]
