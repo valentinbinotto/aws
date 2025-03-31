@@ -3,27 +3,15 @@ Parameters:
     Type: String
     Default: ipfs-0001-debian
   EC2SSHKeyIPFSAccess:
-    Type: String
-    Default: sshkey-bastion-0001
+    Type: AWS::EC2::KeyPair::KeyName
   VPCid:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::VPC::Id
   VPCPublicSubnetId:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::Subnet::Id
   EC2AMIid:
-    Type: String
-    Default: ""
-  PublicKeyMaterialAdmin:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::Image::Id
 
 Resources:
-  SSHKeyBastionAccess:
-    Type: AWS::EC2::KeyPair
-    Properties:
-      KeyName: !Ref EC2SSHKeyIPFSAccess
-      PublicKeyMaterial: !Ref PublicKeyMaterialAdmin
 
   IpfsSecurityGroup0001:
     Type: AWS::EC2::SecurityGroup
