@@ -3,30 +3,17 @@ Parameters:
     Type: String
     Default: bastion-0001-debian
   EC2SSHKeyBastionAccess:
-    Type: String
-    Default: sshkey-bastion-0001
+    Type: AWS::EC2::KeyPair::KeyName
   VPCid:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::VPC::Id
   VPCPublicSubnetId:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::Subnet::Id
   EC2SecurityGroupid:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::SecurityGroup::Id
   EC2AMIid:
-    Type: String
-    Default: ""
-  PublicKeyMaterialAdmin:
-    Type: String
-    Default: ""
+    Type: AWS::EC2::Image::Id
 
 Resources:
-  SSHKeyBastionAccess:
-    Type: AWS::EC2::KeyPair
-    Properties:
-      KeyName: !Ref EC2SSHKeyBastionAccess
-      PublicKeyMaterial: !Ref PublicKeyMaterialAdmin
 
 ## SETUP SSM ##
 
