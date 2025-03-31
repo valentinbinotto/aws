@@ -1,1 +1,47 @@
-#
+Parameters:
+  EC2InstanceAMIRefName:
+    Type: String
+    Default: ami-ref-0001-debian
+  EC2SSHKeyAMIRefAccess:
+    Type: AWS::EC2::KeyPair::KeyName
+  VPCid:
+    Type: AWS::EC2::VPC::Id
+  VPCPublicSubnetId:
+    Type: AWS::EC2::Subnet::Id
+  EC2SecurityGroupid:
+    Type: AWS::EC2::SecurityGroup::Id
+  EC2AMIid:
+    Type: AWS::EC2::Image::Id
+
+Resources:
+
+[setup ssm]
+
+
+  EC2InstanceAMIRef:
+    Type: AWS::EC2::Instance
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref EC2InstanceAMIRefName
+      ImageId: !Ref EC2AMIid
+      InstanceInitiatedShutdownBehavior: stop
+      InstanceType: t3.small
+      KeyName: !Ref EC2SSHKeyAMIRefAccess
+      Monitoring: true
+      UserData: !Base64
+        Fn::Sub: |
+          #!/bin/bash
+          apt update
+          apt full-upgrade -y
+          apt install -y git curl wget openstack-clients vim awscli
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroupid
+      SubnetId: !Ref VPCPublicSubnetId
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sda1"
+        Ebs:
+          DeleteOnTermination: false
+          Encrypted: false
+          VolumeSize: 20
+          VolumeType: gp3
