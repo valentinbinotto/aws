@@ -1,0 +1,5 @@
+# place in /home/$USER/.aws/profile
+[default-aws-profile]
+region = us-east-1
+#endpoint_url =
+output = text

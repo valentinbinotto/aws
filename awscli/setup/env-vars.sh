@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export AWS_ACCESS_KEY_ID=XYZ
+export AWS_SECRET_ACCESS_KEY=XYZ
+export AWS_DEFAULT_REGION=us-east-1
+export AWS_DEFAULT_OUTPUT=text
